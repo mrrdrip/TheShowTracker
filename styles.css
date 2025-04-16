@@ -8,67 +8,42 @@ body {
 }
 header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-bottom: 1rem;
-}
-h1 {
-  font-size: 1.5rem;
-  margin: 0;
 }
 .controls {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.5rem;
 }
-.controls input {
+input {
   padding: 0.5rem;
   border: 1px solid #555;
   border-radius: 4px;
   background: #2c2c2c;
   color: #f0f0f0;
 }
-.controls input::placeholder {
-  color: #999;
-}
-.last-updated {
-  font-size: 0.85rem;
-  color: #bbb;
-  margin-top: 0.5rem;
-}
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 1rem;
 }
 .card {
   background: #1e1e1e;
   padding: 0.5rem;
-  border: 1px solid #333;
   border-radius: 4px;
   text-align: center;
+  border: 2px solid transparent;
+  transition: border 0.3s ease;
 }
 .card img {
   max-width: 100%;
   height: auto;
   border-radius: 4px;
 }
-.card h3 {
-  margin: 0.5rem 0 0.25rem;
-  font-size: 1.1rem;
-}
-.card .prices {
-  font-size: 0.9rem;
-}
-.card .prices .buy,
-.card .prices .sell {
-  font-weight: bold;
-}
 .under-alert {
-  border: 2px solid #4caf50;
+  border-color: #4caf50;
 }
 .over-alert {
-  border: 2px solid #f44336;
+  border-color: #f44336;
 }
