@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diamond Watch v11</title>
+  <title>Diamond Watch v12</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header>
-    <h1>Diamond Watch v11</h1>
+    <h1>Diamond Watch v12</h1>
     <div class="controls">
       <input type="text" id="search" placeholder="Search players..." />
       <input type="number" id="alertThreshold" placeholder="Buy alert threshold" />
@@ -19,6 +19,16 @@
   <main>
     <div class="card-container" id="cardContainer"></div>
   </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2 id="modalTitle">Price History</h2>
+      <ul id="priceHistory"></ul>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

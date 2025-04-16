@@ -15,21 +15,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("search");
   const alertInput = document.getElementById("alertThreshold");
   const lastUpdated = document.getElementById("lastUpdated");
+  const modal = document.getElementById("modal");
+  const modalTitle = document.getElementById("modalTitle");
+  const priceHistoryEl = document.getElementById("priceHistory");
+  const closeModal = document.getElementById("closeModal");
 
   let cardElements = [];
+  const priceHistories = {};
 
   function createCard(player) {
     const div = document.createElement("div");
     div.className = "card";
     div.dataset.name = player.name.toLowerCase();
     div.innerHTML = \`
-      <img src="https://mlb24.theshow.com/images/cards/\${player.id}.png" onerror="this.src='https://via.placeholder.com/250x350?text=Card+Image';" />
+      <img src="https://images.showzone.io/cards/live_series/\${player.id}.png"
+           onerror="this.onerror=null;this.src='https://mlb-cards.vercel.app/card/\${player.id}.png';"
+      />
       <h3>\${player.name}</h3>
       <p class="prices">
         Buy Now: <span class="buy">-</span><br />
         Sell Now: <span class="sell">-</span>
       </p>
     \`;
+    div.addEventListener("click", () => showPriceHistory(player.name));
     container.appendChild(div);
     return div;
   }
@@ -44,6 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       el.querySelector(".buy").textContent = buy;
       el.querySelector(".sell").textContent = sell;
+
+      // Save history
+      if (!priceHistories[player.name]) priceHistories[player.name] = [];
+      priceHistories[player.name].unshift(buy);
+      if (priceHistories[player.name].length > 10) {
+        priceHistories[player.name] = priceHistories[player.name].slice(0, 10);
+      }
 
       const threshold = parseFloat(alertInput.value);
       el.classList.remove("under-alert", "over-alert");
@@ -76,18 +91,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Set and load alert threshold from localStorage
+  function showPriceHistory(playerName) {
+    const prices = priceHistories[playerName] || [];
+    modalTitle.textContent = \`\${playerName} - Price History\`;
+    priceHistoryEl.innerHTML = prices.map(p => \`<li>\$ \${p}</li>\`).join("");
+    modal.style.display = "block";
+  }
+
+  closeModal.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  window.onclick = e => {
+    if (e.target === modal) modal.style.display = "none";
+  };
+
   const savedThreshold = localStorage.getItem("alertThreshold");
   if (savedThreshold) alertInput.value = savedThreshold;
 
   alertInput.addEventListener("input", () => {
     localStorage.setItem("alertThreshold", alertInput.value);
-    updatePrices([]); // trigger border update only
   });
 
   searchInput.addEventListener("input", handleSearch);
 
-  // Initial card rendering
   players.forEach(player => {
     const card = createCard(player);
     cardElements.push({ player, el: card });
