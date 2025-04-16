@@ -1,23 +1,26 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const cardsToWatch = [
-    { name: "Pete Alonso", id: "alonso", image: "https://images.mlbcards.io/alonso.png" },
-    { name: "CJ Abrams", id: "abrams", image: "https://images.mlbcards.io/abrams.png" },
-    { name: "Josh Naylor", id: "naylor", image: "https://images.mlbcards.io/naylor.png" },
-    { name: "Oneil Cruz", id: "cruz", image: "https://images.mlbcards.io/cruz.png" },
-    { name: "Jack Leiter", id: "leiter", image: "https://images.mlbcards.io/leiter.png" },
-    { name: "Corbin Carroll", id: "carroll", image: "https://images.mlbcards.io/carroll.png" },
-    { name: "Colton Cowser", id: "cowser", image: "https://images.mlbcards.io/cowser.png" },
-    { name: "Riley Greene", id: "greene", image: "https://images.mlbcards.io/greene.png" },
-    { name: "Jack Flaherty", id: "flaherty", image: "https://images.mlbcards.io/flaherty.png" },
-    { name: "Matt Chapman", id: "chapman", image: "https://images.mlbcards.io/chapman.png" },
-    { name: "Anthony Rendon", id: "rendon", image: "https://images.mlbcards.io/rendon.png" }
+    { name: "Pete Alonso", id: "alonso", image: "" },
+    { name: "CJ Abrams", id: "abrams", image: "" },
+    { name: "Josh Naylor", id: "naylor", image: "" },
+    { name: "Oneil Cruz", id: "cruz", image: "" },
+    { name: "Jack Leiter", id: "leiter", image: "" },
+    { name: "Corbin Carroll", id: "carroll", image: "" },
+    { name: "Colton Cowser", id: "cowser", image: "" },
+    { name: "Riley Greene", id: "greene", image: "" },
+    { name: "Jack Flaherty", id: "flaherty", image: "" },
+    { name: "Matt Chapman", id: "chapman", image: "" },
+    { name: "Anthony Rendon", id: "rendon", image: "" }
   ];
 
   let notified = {};
 
+  const normalize = (str) =>
+    str.toLowerCase().replace(/[^a-z0-9]/g, "");
+
   const fetchCardPrices = async () => {
-    const search = document.getElementById("searchInput").value.toLowerCase();
+    const search = normalize(document.getElementById("searchInput").value);
     const alertPrice = parseFloat(document.getElementById("globalAlert").value);
     const container = document.getElementById("cards");
     container.innerHTML = "<p>Loading...</p>";
@@ -29,17 +32,20 @@ document.addEventListener("DOMContentLoaded", () => {
       container.innerHTML = "";
 
       cardsToWatch.forEach(player => {
-        if (!player.name.toLowerCase().includes(search)) return;
+        const searchName = normalize(player.name);
+        if (!searchName.includes(search)) return;
 
-        const match = allListings.find(item => item.name.toLowerCase().includes(player.name.toLowerCase()));
+        const match = allListings.find(item => normalize(item.name).includes(searchName));
         if (match) {
           const card = document.createElement("div");
           card.className = "card";
           const isHigh = match.best_buy_price > alertPrice;
           const priceClass = isHigh ? "price-high" : "price-low";
 
+          const image = player.image || "https://via.placeholder.com/250x350?text=Card+Image";
+
           card.innerHTML = \`
-            <img src="\${player.image}" alt="\${player.name}">
+            <img src="\${image}" alt="\${player.name}">
             <h2>\${match.name}</h2>
             <p class="\${priceClass}">Buy Now: \${match.best_buy_price}</p>
             <p>Sell Now: \${match.best_sell_price}</p>
