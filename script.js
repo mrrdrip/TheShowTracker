@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       updatePrices(data.listings || []);
     } catch (e) {
-      console.error("Fetch failed", e);
+      console.error("Fetch failed:", e); document.getElementById('lastUpdated').textContent = 'Fetch failed';
     }
   }
 
@@ -120,6 +120,9 @@ document.addEventListener("DOMContentLoaded", () => {
     cardElements.push({ player, el: card });
   });
 
+  
   fetchData();
+  console.log("Initial data fetch triggered...");
+
   setInterval(fetchData, 2000);
 });
